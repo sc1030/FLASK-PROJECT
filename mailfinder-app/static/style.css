@@ -1,0 +1,128 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(120deg, #89f7fe, #66a6ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    color: #333;
+}
+
+/* Main Container */
+.container {
+    background-color: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+/* Title */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+/* Search Form */
+.search-form input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: 0.3s ease;
+}
+
+.search-form input:focus {
+    border-color: #66a6ff;
+    outline: none;
+}
+
+.search-form button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #66a6ff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search-form button:hover {
+    background: #558de8;
+}
+
+/* Suggestions Dropdown */
+ul#suggestions {
+    list-style: none;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #fff;
+    margin-top: -5px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+ul#suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+ul#suggestions li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Results */
+.results {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.results ul {
+    margin-top: 10px;
+}
+
+.results li {
+    background: #f7f7f7;
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

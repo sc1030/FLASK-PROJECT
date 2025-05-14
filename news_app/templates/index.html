@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flask News App</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Font (Poppins) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Style -->
+    <style>
+      /* General Reset */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        padding: 20px;
+        background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+        min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+      }
+      h1 {
+        font-weight: bold;
+        color: #003366;
+      }
+      .news-card {
+        margin-bottom: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .news-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        overflow: hidden;
+        animation: fadeIn 1s ease forwards;
+      }
+      .card-img-top {
+        height: 250px;
+        object-fit: cover;
+      }
+      .category-buttons button {
+        margin: 5px;
+        transition: background 0.3s ease;
+      }
+      .category-buttons button:hover {
+        background-color: #007bff;
+        color: white;
+      }
+      .form-control, .form-select {
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .btn-primary {
+        border-radius: 12px;
+      }
+      .error-img {
+        width: 300px;
+        margin: 20px 0;
+      }
+      #loader {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Shimmer Effect */
+      .shimmer {
+        background: linear-gradient(
+          to right,
+          #f6f7f8 0%,
+          #edeef1 20%,
+          #f6f7f8 40%,
+          #f6f7f8 100%
+        );
+        background-size: 1000px 100%;
+        animation: shimmer 1.5s infinite linear forwards;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      .skeleton-card {
+        border-radius: 20px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        margin-bottom: 20px;
+      }
+      .skeleton-img {
+        width: 100%;
+        height: 200px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+      }
+      .skeleton-title,
+      .skeleton-text {
+        height: 20px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+      .skeleton-title {
+        width: 70%;
+      }
+      .skeleton-text {
+        width: 90%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="mb-4 text-center">🗞️ Flask News Application</h1>
+
+      <!-- Search Form + Country Dropdown -->
+      <form method="POST" class="row mb-4">
+        <div class="col-md-4 mb-2">
+          <input
+            type="text"
+            name="query"
+            class="form-control"
+            placeholder="Search for news..."
+            value="{{ query or '' }}"
+          />
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <select name="country" class="form-select">
+            {% for code, name in countries.items() %}
+              <option value="{{ code }}" {% if code == selected_country %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+      </form>
+
+      <!-- Category Buttons -->
+      <div class="category-buttons mb-4 text-center">
+        {% for category in categories %}
+        <form method="POST" style="display: inline;">
+          <input type="hidden" name="category" value="{{ category }}" />
+          <input type="hidden" name="country" value="{{ selected_country }}" />
+          <button
+            type="submit"
+            class="btn {% if category == selected_category %}btn-info{% else %}btn-outline-secondary{% endif %}"
+          >
+            {{ category.capitalize() }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+
+      {% if error %}
+      <div class="text-center">
+        <p class="text-danger">{{ error }}</p>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
+          class="error-img"
+          alt="Error Image"
+        />
+      </div>
+      {% endif %}
+
+      <!-- Skeleton Loader -->
+      <div id="skeleton-loader" class="row mb-4">
+        {% for _ in range(6) %}
+        <div class="col-md-6">
+          <div class="skeleton-card">
+            <div class="shimmer skeleton-img"></div>
+            <div class="shimmer skeleton-title"></div>
+            <div class="shimmer skeleton-text"></div>
+            <div class="shimmer skeleton-text" style="width: 60%;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if articles %}
+      <div class="row">
+        {% for article in articles %}
+        <div class="col-md-6 news-card">
+          <div class="card">
+            {% if article.urlToImage %}
+            <img
+              src="{{ article.urlToImage }}"
+              class="card-img-top"
+              alt="News Image"
+            />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ article.title }}</h5>
+              <p class="card-text">{{ article.description }}</p>
+              <p>
+                <small class="text-muted">
+                  Source: {{ article.source.name if article.source else 'Unknown' }}
+                </small>
+              </p>
+              <a
+                href="{{ article.url }}"
+                target="_blank"
+                class="btn btn-primary"
+              >
+                Read Full Article
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination Buttons -->
+      <div class="d-flex justify-content-between my-4">
+        {% if prev_page %}
+        <a href="?page={{ prev_page }}" class="btn btn-outline-primary">
+          Previous
+        </a>
+        {% else %}
+        <span></span>
+        {% endif %}
+        
+        {% if next_page %}
+        <a href="?page={{ next_page }}" class="btn btn-outline-primary">
+          Next
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Loader Spinner -->
+    <div id="loader">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Show loader when form is submitted
+      document.querySelectorAll("form").forEach((form) => {
+        form.addEventListener("submit", function () {
+          document.getElementById("loader").style.display = "block";
+        });
+      });
+
+      // Hide shimmer loader when real articles load
+      window.addEventListener('load', () => {
+        const articlesExist = {{ articles|length if articles else 0 }};
+        if (articlesExist > 0) {
+          document.getElementById('skeleton-loader').style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html>

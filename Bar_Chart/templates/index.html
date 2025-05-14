@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Bar Chart</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+
+      #category-select {
+        margin-bottom: 20px;
+        padding: 5px;
+        font-size: 16px;
+      }
+
+      #chart {
+        width: 100%;
+        max-width: 900px;
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Select a Category</h2>
+    <select id="category-select">
+      <option value="Category A">Category A</option>
+      <option value="Category B">Category B</option>
+      <option value="Category C">Category C</option>
+    </select>
+
+    <div id="chart"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

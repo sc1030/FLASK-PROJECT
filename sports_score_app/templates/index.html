@@ -1,0 +1,137 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cricket Matches</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Cricket Matches</h1>
+        <p class="last-updated">
+          Last updated: {{ datetime.now().strftime("%Y-%m-%d %H:%M:%S") }}
+        </p>
+      </header>
+
+      <div class="tabs">
+        <button class="tab-button active" onclick="openTab('live')">
+          Live Matches
+        </button>
+        <button class="tab-button" onclick="openTab('upcoming')">
+          Upcoming Matches
+        </button>
+        <button class="tab-button" onclick="openTab('past')">
+          Past Matches
+        </button>
+      </div>
+
+      <div id="live" class="tab-content" style="display: block">
+        <h2>Live Matches</h2>
+        {% if not live_matches %}
+        <p class="no-matches">No live matches currently</p>
+        {% else %}
+        <div class="matches-grid">
+          {% for match in live_matches %}
+          <div class="match-card">
+            <h3>{{ match.title }}</h3>
+            <div class="teams">
+              <div class="team">{{ match.team1 }}</div>
+              <div class="vs">vs</div>
+              <div class="team">{{ match.team2 }}</div>
+            </div>
+            <div class="status">{{ match.status }}</div>
+            <a href="/match?url={{ match.link|urlencode }}" class="details-link"
+              >View Details</a
+            >
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div id="upcoming" class="tab-content">
+        <h2>Upcoming Matches</h2>
+        {% if not upcoming_matches %}
+        <p class="no-matches">No upcoming matches scheduled</p>
+        {% else %}
+        <div class="matches-grid">
+          {% for match in upcoming_matches %}
+          <div class="match-card">
+            <h3>{{ match.title }}</h3>
+            <div class="teams">
+              <div class="team">{{ match.team1 }}</div>
+              <div class="vs">vs</div>
+              <div class="team">{{ match.team2 }}</div>
+            </div>
+            <div class="date">{{ match.date }}</div>
+            <a href="/match?url={{ match.link|urlencode }}" class="details-link"
+              >View Details</a
+            >
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div id="past" class="tab-content">
+        <h2>Past Matches</h2>
+        {% if not past_matches %}
+        <p class="no-matches">No past matches available</p>
+        {% else %}
+        <div class="matches-grid">
+          {% for match in past_matches %}
+          <div class="match-card">
+            <h3>{{ match.title }}</h3>
+            <div class="teams">
+              <div class="team">{{ match.team1 }}</div>
+              <div class="vs">vs</div>
+              <div class="team">{{ match.team2 }}</div>
+            </div>
+            <div class="result">{{ match.result }}</div>
+            <a href="/match?url={{ match.link|urlencode }}" class="details-link"
+              >View Details</a
+            >
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <footer>
+        <p>Data sourced from Cricbuzz</p>
+        <p>
+          API Endpoints: <a href="/api/live">/api/live</a> |
+          <a href="/api/upcoming">/api/upcoming</a> |
+          <a href="/api/past">/api/past</a>
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      function openTab(tabName) {
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+          tabContents[i].style.display = "none";
+        }
+
+        const tabButtons = document.getElementsByClassName("tab-button");
+        for (let i = 0; i < tabButtons.length; i++) {
+          tabButtons[i].classList.remove("active");
+        }
+
+        document.getElementById(tabName).style.display = "block";
+        event.currentTarget.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

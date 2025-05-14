@@ -1,0 +1,144 @@
+<!-- templates/match.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Details</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back-link">← Back to Matches</a>
+
+      {% if match_info %}
+      <div class="match-header">
+        <h1>{{ match_info.get('title', 'Match Details') }}</h1>
+        {% if match_info.get('team1') and match_info.get('team2') %}
+        <div class="teams">
+          <span class="team">{{ match_info.team1 }}</span>
+          <span class="vs">vs</span>
+          <span class="team">{{ match_info.team2 }}</span>
+        </div>
+        {% endif %} {% if match_info.get('venue') %}
+        <div class="match-venue">{{ match_info.venue }}</div>
+        {% endif %} {% if match_info.get('date') %}
+        <div class="match-date">{{ match_info.date }}</div>
+        {% endif %}
+      </div>
+      {% endif %} {% if innings %}
+      <div class="innings-summary">
+        <h3>Innings Summary</h3>
+        <ul>
+          {% for inning in innings %}
+          <li>{{ inning }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="tabs">
+        <button class="tab-button active" onclick="openTab('scorecard')">
+          Scorecard
+        </button>
+        <button class="tab-button" onclick="openTab('commentary')">
+          Commentary
+        </button>
+        <button class="tab-button" onclick="openTab('fow')">
+          Fall of Wickets
+        </button>
+      </div>
+
+      <div id="scorecard" class="tab-content" style="display: block">
+        <h2>Scorecard</h2>
+        {% if not scorecard %}
+        <p class="no-data">Scorecard not available</p>
+        {% else %} {% for heading, data in scorecard.items() %}
+        <div class="scorecard-section">
+          <h3>{{ heading }}</h3>
+          <div class="table-container">
+            <table>
+              {% if data.headers %}
+              <thead>
+                <tr>
+                  {% for header in data.headers %}
+                  <th>{{ header }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              {% endif %}
+              <tbody>
+                {% for row in data.rows %}
+                <tr>
+                  {% for cell in row %}
+                  <td>{{ cell }}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %} {% endif %}
+      </div>
+
+      <div id="commentary" class="tab-content">
+        <h2>Commentary</h2>
+        {% if not commentary %}
+        <p class="no-data">Commentary not available</p>
+        {% else %}
+        <div class="commentary-container">
+          {% for item in commentary %}
+          <div class="commentary-item">
+            <div class="commentary-header">
+              <span class="over">{{ item.over }}</span>
+              {% if item.timestamp %}
+              <span class="timestamp">{{ item.timestamp }}</span>
+              {% endif %}
+            </div>
+            <div class="commentary-text">{{ item.text }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div id="fow" class="tab-content">
+        <h2>Fall of Wickets</h2>
+        {% if not fall_of_wickets %}
+        <p class="no-data">Fall of wickets data not available</p>
+        {% else %}
+        <div class="fow-container">
+          {% for wicket in fall_of_wickets %}
+          <div class="fow-item">{{ wicket }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      function openTab(tabName) {
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+          tabContents[i].style.display = "none";
+        }
+
+        const tabButtons = document.getElementsByClassName("tab-button");
+        for (let i = 0; i < tabButtons.length; i++) {
+          tabButtons[i].classList.remove("active");
+        }
+
+        document.getElementById(tabName).style.display = "block";
+        event.currentTarget.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

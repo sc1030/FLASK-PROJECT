@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather App</h1>
+
+      <form method="POST">
+        <input type="text" name="city" placeholder="Enter city name" required />
+        <button type="submit">Get Weather</button>
+      </form>
+
+      {% if error %}
+      <div class="alert error">{{ error }}</div>
+      {% endif %} {% if weather %}
+      <div class="weather-card">
+        <h2>{{ weather.city }}, {{ weather.country }}</h2>
+
+        <div class="weather-main">
+          <img
+            src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+            alt="{{ weather.description }}"
+            class="weather-icon"
+          />
+          <div class="temp">{{ weather.temp }}°C</div>
+        </div>
+
+        <p class="description">{{ weather.description }}</p>
+
+        <div class="weather-details">
+          <div><span>Feels like:</span> {{ weather.feels_like }}°C</div>
+          <div><span>Humidity:</span> {{ weather.humidity }}%</div>
+          <div><span>Wind:</span> {{ weather.wind_speed }} km/h</div>
+          <div><span>Pressure:</span> {{ weather.pressure }} hPa</div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

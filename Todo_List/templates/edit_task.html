@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Task</title>
+  </head>
+  <body>
+    <h1>Edit Task</h1>
+    <form action="/edit/{{ task.id }}" method="POST">
+      <input type="text" name="task" value="{{ task.content }}" required />
+      <input
+        type="datetime-local"
+        name="due_date"
+        value="{{ task.due_date }}"
+      />
+      <label for="priority">Mark as Priority:</label>
+      <input
+        type="checkbox"
+        name="priority"
+        {%
+        if
+        task.priority
+        %}
+        checked
+        {%
+        endif
+        %}
+      />
+      <button type="submit">Save Changes</button>
+    </form>
+  </body>
+</html>

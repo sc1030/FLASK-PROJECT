@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Autocomplete Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .autocomplete {
+        position: relative;
+        display: inline-block;
+      }
+      input {
+        padding: 10px;
+        width: 300px;
+        font-size: 16px;
+      }
+      .suggestions {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        top: 100%;
+        left: 0;
+        right: 0;
+      }
+      .suggestions div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+      }
+      .suggestions div:hover {
+        background-color: #e9e9e9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fruit Autocomplete Demo</h1>
+
+    <div class="autocomplete">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Start typing a fruit name..."
+      />
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+
+    <script>
+      const searchInput = document.getElementById("searchInput");
+      const suggestionsDiv = document.getElementById("suggestions");
+
+      searchInput.addEventListener("input", function () {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+          suggestionsDiv.innerHTML = "";
+          suggestionsDiv.style.display = "none";
+          return;
+        }
+
+        fetch(`/suggest?query=${encodeURIComponent(query)}`)
+          .then((response) => response.json())
+          .then((suggestions) => {
+            suggestionsDiv.innerHTML = "";
+
+            if (suggestions.length === 0) {
+              suggestionsDiv.style.display = "none";
+              return;
+            }
+
+            suggestions.forEach((suggestion) => {
+              const div = document.createElement("div");
+              div.textContent = suggestion;
+              div.addEventListener("click", function () {
+                searchInput.value = suggestion;
+                suggestionsDiv.innerHTML = "";
+                suggestionsDiv.style.display = "none";
+              });
+              suggestionsDiv.appendChild(div);
+            });
+
+            suggestionsDiv.style.display = "block";
+          })
+          .catch((error) => {
+            console.error("Error fetching suggestions:", error);
+          });
+      });
+
+      // Hide suggestions when clicking outside
+      document.addEventListener("click", function (e) {
+        if (e.target !== searchInput) {
+          suggestionsDiv.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

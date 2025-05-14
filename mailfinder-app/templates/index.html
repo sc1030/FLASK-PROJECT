@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MailFinder - Find Email by Name</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="fade-in">MailFinder 📧</h1>
+      <p class="subtitle fade-in">
+        Search an email by typing a full or partial name
+      </p>
+
+      <form method="POST" class="search-form fade-in">
+        <input
+          type="text"
+          name="full_name"
+          id="full_name"
+          placeholder="Enter name..."
+          autocomplete="off"
+          required
+        />
+        <ul id="suggestions"></ul>
+        <button type="submit">🔍 Find Email</button>
+      </form>
+
+      {% if email_results %}
+      <div class="results fade-in">
+        <h3>Matched Emails:</h3>
+        <ul>
+          {% for email in email_results %}
+          <li>{{ email }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

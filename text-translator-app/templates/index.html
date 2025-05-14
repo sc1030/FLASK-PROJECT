@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Text Translator</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌐 AI Text Translator</h1>
+      <form method="POST">
+        <textarea
+          name="text"
+          placeholder="Type or paste your text here..."
+          required
+        ></textarea>
+
+        <div class="row">
+          <select name="language" required>
+            <option value="fr">French 🇫🇷</option>
+            <option value="es">Spanish 🇪🇸</option>
+            <option value="de">German 🇩🇪</option>
+            <option value="hi">Hindi 🇮🇳</option>
+            <option value="zh-CN">Chinese 🇨🇳</option>
+            <option value="ar">Arabic 🇸🇦</option>
+          </select>
+          <button type="submit">Translate</button>
+        </div>
+      </form>
+
+      {% if translated_text %}
+      <div class="output">
+        <h2>Translated Result</h2>
+        <p>{{ translated_text }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <footer>
+      <p>Made with ❤️ using Flask & Deep Translator</p>
+    </footer>
+  </body>
+</html>

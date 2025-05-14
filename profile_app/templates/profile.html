@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Profile</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f2f2f2;
+        text-align: center;
+        padding: 40px;
+      }
+      .profile-card {
+        background: white;
+        padding: 30px;
+        max-width: 400px;
+        margin: 0 auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 15px 5px 0;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+      .btn.logout {
+        background: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-card">
+      {% if user.profile_pic %}
+      <img
+        src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}"
+        class="profile-img"
+        alt="Profile Picture"
+      />
+      {% else %}
+      <img
+        src="{{ url_for('static', filename='default.png') }}"
+        class="profile-img"
+        alt="Default Picture"
+      />
+      {% endif %}
+
+      <h2>{{ user.name }}</h2>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Contact:</strong> {{ user.contact or 'N/A' }}</p>
+
+      <a href="{{ url_for('edit_profile') }}" class="btn">Edit Profile</a>
+      <a href="{{ url_for('logout') }}" class="btn logout">Logout</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body and background */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  /* Container for the To-Do List */
+  .container {
+    width: 100%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .container:hover {
+    transform: translateY(-5px);
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: relative;
+    text-transform: uppercase;
+  }
+  
+  h1::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #e74c3c;
+    animation: line 1s forwards;
+  }
+  
+  @keyframes line {
+    0% {
+      transform: scaleX(0);
+      transform-origin: bottom right;
+    }
+    100% {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+  }
+  
+  /* Task Input Form */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  form input[type="text"] {
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #bdc3c7;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  form input[type="text"]:focus {
+    border: 2px solid #e74c3c;
+  }
+  
+  form input[type="datetime-local"],
+  form input[type="checkbox"] {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #bdc3c7;
+  }
+  
+  form button {
+    padding: 12px 20px;
+    background-color: #e74c3c;
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Filter Section */
+  #filter {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid #bdc3c7;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  
+  #filter:hover {
+    border-color: #e74c3c;
+  }
+  
+  /* Task List */
+  ul {
+    list-style: none;
+    margin-top: 20px;
+  }
+  
+  .task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  
+  .task:hover {
+    transform: translateY(-3px);
+    background: #ecf0f1;
+  }
+  
+  .task .task-content {
+    font-size: 1.2rem;
+    font-weight: 500;
+    flex: 1;
+    padding-right: 20px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .task.done .task-content {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  
+  .task .task-content.priority {
+    color: #e74c3c;
+    font-weight: 700;
+  }
+  
+  .task .task-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .task a {
+    text-decoration: none;
+    color: #3498db;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .task a:hover {
+    color: #e74c3c;
+  }
+  
+  .task .task-actions a {
+    font-size: 1.3rem;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: #ecf0f1;
+    transition: all 0.3s ease;
+  }
+  
+  .task .task-actions a:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  /* Add smooth transition for hover effect on buttons */
+  button:focus, a:focus {
+    outline: none;
+  }
+  
+  button, a {
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+      width: 90%;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    form input[type="text"], form button {
+      font-size: 0.9rem;
+    }
+  
+    .task .task-content {
+      font-size: 1rem;
+    }
+  }
+  

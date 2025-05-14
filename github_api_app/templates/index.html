@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GitHub Profile Finder</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>GitHub Profile Finder</h2>
+      <input type="text" id="username" placeholder="Enter GitHub username" />
+      <button onclick="fetchUser()">Search</button>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      async function fetchUser() {
+        const username = document.getElementById("username").value;
+        const res = await fetch("/api/github-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username }),
+        });
+
+        const data = await res.json();
+        const resultDiv = document.getElementById("result");
+
+        if (res.ok) {
+          resultDiv.innerHTML = `
+                    <div class="card">
+                        <img src="${data.avatar_url}" alt="${data.username}">
+                        <h3>${data.username}</h3>
+                        <p><strong>Repositories:</strong> ${data.public_repos}</p>
+                    </div>
+                `;
+        } else {
+          resultDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+        }
+      }
+    </script>
+  </body>
+</html>

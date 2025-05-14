@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Advanced To-Do List</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      /* Example styling for priority tasks */
+      .priority {
+        color: red;
+        font-weight: bold;
+      }
+      .done {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📝 Advanced To-Do List</h1>
+
+      <!-- Add New Task Form -->
+      <form action="/add" method="post">
+        <input
+          type="text"
+          name="task"
+          placeholder="Enter a new task"
+          required
+        />
+        <input type="datetime-local" name="due_date" placeholder="Due Date" />
+        <label for="priority">Mark as Priority:</label>
+        <input type="checkbox" name="priority" />
+        <button type="submit">Add Task</button>
+      </form>
+
+      <!-- Filter Section -->
+      <div>
+        <label for="filter">Filter Tasks:</label>
+        <select id="filter" onchange="filterTasks(event)">
+          <option value="all">All Tasks</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+          <option value="priority">Priority</option>
+        </select>
+      </div>
+
+      <!-- Tasks List -->
+      <ul id="task-list">
+        {% for task in tasks %}
+        <li
+          class="task {{ 'done' if task.done else '' }} {{ 'priority' if task.priority else '' }}"
+        >
+          <span>
+            {{ task.content }} {% if task.due_date %} (Due: {{ task.due_date }})
+            {% endif %}
+          </span>
+          <div>
+            {% if not task.done %}
+            <a href="/toggle/{{ loop.index0 }}">Mark as Done</a>
+            <a href="/edit/{{ loop.index0 }}">Edit</a>
+            {% else %}
+            <span>✅ Completed</span>
+            {% endif %}
+            <a href="/delete/{{ loop.index0 }}">🗑️ Delete</a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <script>
+      function filterTasks(event) {
+        const filter = event.target.value;
+        const tasks = document.querySelectorAll(".task");
+
+        tasks.forEach((task) => {
+          const isDone = task.classList.contains("done");
+          const isPriority = task.classList.contains("priority");
+
+          if (filter === "completed" && !isDone) {
+            task.style.display = "none";
+          } else if (filter === "pending" && isDone) {
+            task.style.display = "none";
+          } else if (filter === "priority" && !isPriority) {
+            task.style.display = "none";
+          } else {
+            task.style.display = "";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatGPT Clone</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>ChatGPT Clone (Cohere)</h1>
+
+      <div id="chat-box"></div>
+
+      <div class="loading-spinner" id="loading-spinner">
+        <span>...</span> Please wait while I think...
+      </div>
+
+      <div id="input-container">
+        <input type="text" id="user-input" placeholder="Type a message..." />
+        <button id="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // Scroll chatbox to the bottom
+      function scrollToBottom() {
+        const chatBox = document.getElementById("chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      // Display the user's and bot's messages
+      function displayMessage(message, role) {
+        const chatBox = document.getElementById("chat-box");
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", role);
+
+        const messageContent = document.createElement("div");
+        messageContent.classList.add("content");
+        messageContent.textContent = message;
+
+        messageDiv.appendChild(messageContent);
+        chatBox.appendChild(messageDiv);
+        scrollToBottom();
+      }
+
+      // Send the user's message and get the bot's reply
+      async function sendMessage() {
+        const userInput = document.getElementById("user-input");
+        const message = userInput.value.trim();
+
+        if (!message) return; // Don't send empty messages
+
+        // Display user's message
+        displayMessage(message, "user");
+
+        // Show loading spinner while waiting for the bot's reply
+        document.getElementById("loading-spinner").style.display = "block";
+
+        userInput.value = ""; // Clear the input field
+
+        // Send the message to the server
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await response.json();
+
+        // Hide loading spinner
+        document.getElementById("loading-spinner").style.display = "none";
+
+        if (data.reply) {
+          // Display bot's response
+          displayMessage(data.reply, "bot");
+        } else {
+          // Display error if any
+          displayMessage("Oops! Something went wrong.", "bot");
+        }
+      }
+
+      // Send message when pressing "Enter"
+      document
+        .getElementById("user-input")
+        .addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            sendMessage();
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wikipedia Search</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <button class="toggle-btn" onclick="toggleDarkMode()">
+        🌗 Toggle Dark Mode
+      </button>
+
+      <h1>Wikipedia Search App</h1>
+      <form id="searchForm">
+        <input type="text" id="query" placeholder="Search term..." required />
+        <select id="lang">
+          <option value="en">English</option>
+          <option value="hi">Hindi</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+        </select>
+        <input type="submit" value="Search" />
+      </form>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+      }
+
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const query = document.getElementById("query").value;
+          const lang = document.getElementById("lang").value;
+
+          fetch("/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, lang }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const resultDiv = document.getElementById("result");
+              if (data.error) {
+                resultDiv.innerHTML = `<p class="error">${data.error}</p>`;
+              } else {
+                let html = `
+                    <h2>${data.title}</h2>
+                    <p>${data.summary}</p>
+                    ${
+                      data.image
+                        ? `<img src="${data.image}" alt="Wikipedia image">`
+                        : ""
+                    }
+                    <p><a href="${
+                      data.url
+                    }" target="_blank">View full article</a></p>
+                `;
+                if (data.toc && data.toc.length > 0) {
+                  html += "<h3>Table of Contents</h3><ul>";
+                  data.toc.forEach((section) => {
+                    html += `<li>${section}</li>`;
+                  });
+                  html += "</ul>";
+                }
+                resultDiv.innerHTML = html;
+              }
+            });
+        });
+    </script>
+  </body>
+</html>

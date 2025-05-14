@@ -1,0 +1,45 @@
+# Environments
+venv/
+env/
+ENV/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Database files
+*.db
+*.sqlite3
+
+# Configuration file with sensitive credentials
+config.ini
+
+# Generated files
+static/images/*.png
+result.csv
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Log files
+*.log
+
+# Virtual environment
+.env
+.venv
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db

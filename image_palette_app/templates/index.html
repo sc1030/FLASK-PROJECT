@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🎨 Image Color Palette Generator</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="main-wrapper">
+      <header>
+        <h1>🎨 Image Color Palette Generator</h1>
+      </header>
+
+      <section class="form-section">
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+          <input type="file" name="image" id="fileInput" required />
+          <label for="fileInput">Choose Image</label>
+          <button type="submit">Generate Palette</button>
+        </form>
+      </section>
+
+      {% if image %}
+      <section class="image-display">
+        <h2>Uploaded Image</h2>
+        <div class="image-card">
+          <div class="card-inner">
+            <div class="card-front">
+              <img
+                src="{{ url_for('static', filename='uploads/' + image) }}"
+                alt="Uploaded Image"
+              />
+            </div>
+            <div class="card-back">
+              <p>Nice Choice!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %} {% if colors %}
+      <section class="palette-display">
+        <h2>Color Palette</h2>
+        <div class="palette">
+          {% for color in colors %}
+          <div class="color-box" style="background-color: {{ color }}">
+            <span>{{ color }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </body>
+</html>

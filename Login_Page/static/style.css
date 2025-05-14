@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    animation: slideIn 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, button {
+    margin: 10px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+input {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: background 0.3s;
+}
+
+input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+input::placeholder {
+    color: #ddd;
+}
+
+button {
+    background-color: #fff;
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.03);
+}
+
+a {
+    color: #ffeb3b;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p.success {
+    color: #00e676;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+p.error {
+    color: #ff5252;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    input, button {
+        font-size: 14px;
+    }
+}
